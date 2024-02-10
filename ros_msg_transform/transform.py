@@ -117,7 +117,7 @@ def _to_ros_primitive(_type, _value):
     if _type == "string" and isinstance(_value, unicode):
         _value = _value.encode('utf8')
     elif _type in ["float32", "float64"]:
-        if _value == None:
+        if _value is None:
             _value = float('Inf')
         #  if math.isnan(_value) or math.isinf(_value):
             #  print("IS Inf or NaN")
@@ -220,8 +220,7 @@ def _dict_to_ros(message, dictionary):
             _value = _to_ros_type(_type, _value)
             setattr(message, field_name, _value)
         else:
-            err = 'ROS message has no field named "{1}"'\
-                .format(field_name)
+            err = f'ROS message has no field named: {field_name}'
             #  err = 'ROS message type "{0}" has no field named "{1}"'\
                 #  .format(message_type, field_name)
             raise ValueError(err)
