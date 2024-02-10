@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "ros-msg-transform"
+version = "0.2.2"
+description = "Transform ROS messages to Python structures"
+authors = ["Konstantinos Panayiotou <klpanagi@ece.auth.gr>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
