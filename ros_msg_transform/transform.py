@@ -1,7 +1,3 @@
-"""
-Highly inspired from: https://github.com/uts-magic-lab/rosduct
-"""
-
 import roslib.message
 import rospy
 import re
@@ -67,16 +63,12 @@ LIST_BRACKETS = re.compile(r'\[[^\]]*\]')
 
 def _to_ros_type(_type, _value):
     if _is_ros_binary_type(_type):
-        #  print("Type {0} is binary type".format(_type))
         _value = _to_ros_binary(_type, _value)
     elif _type in ROS_TIME_TYPES:
-        #  print("Type {0} is time type".format(_type))
         _value = _to_ros_time(_type, _value)
     elif _type in ROS_PRIMITIVE_TYPES:
-        #  print("Type {0} is primitive type".format(_type))
         _value = _to_ros_primitive(_type, _value)
     elif _is_type_an_array(_type):
-        #  print("Type {0} is array type".format(_type))
         _value = _convert_to_ros_array(_type, _value)
     else:
         _value = dict_to_ros_msg(_type, _value)
@@ -119,8 +111,6 @@ def _to_ros_primitive(_type, _value):
     elif _type in ["float32", "float64"]:
         if _value is None:
             _value = float('Inf')
-        #  if math.isnan(_value) or math.isinf(_value):
-            #  print("IS Inf or NaN")
     return _value
 
 
@@ -131,15 +121,12 @@ def _convert_to_ros_array(_type, list_value):
 
 def _from_ros_type(_type, _value):
     if _is_ros_binary_type(_type):
-        #  print("Data is ROS binary type")
         _value = _from_ros_binary(_value)
     elif _type in ROS_TIME_TYPES:
         _value = _from_ros_time(_value)
     elif _type in ROS_PRIMITIVE_TYPES:
-        #  print("Data is ROS primitive type")
         _value = _value
     elif _is_type_an_array(_type):
-        #  print("Data is Array")
         _value = _from_ros_array(_type, _value)
     else:
         _value = _ros_to_dict(_value)
