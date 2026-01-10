@@ -1,14 +1,35 @@
-[tool.poetry]
-name = "ros-msg-transform"
-version = "0.2.2"
-description = "Transform ROS messages to Python structures"
-authors = ["Konstantinos Panayiotou <klpanagi@ece.auth.gr>"]
-license = "MIT"
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.7"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ros-msg-transform"
+version = "0.2.3"
+description = "Library to transform ROS messages to Python structures"
+authors = [
+    { name = "Konstantinos Panayiotou", email = "klpanagi@ece.auth.gr" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["ros", "iot", "cps"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+dependencies = [
+    "setuptools>=21.0.0",
+]
+
+[project.urls]
+homepage = "https://github.com/robotics4all/ros-msg-transform"
+repository = "https://github.com/robotics4all/ros-msg-transform"
+
+[tool.setuptools]
+packages = ["ros_msg_transform"]

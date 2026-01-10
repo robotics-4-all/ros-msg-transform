@@ -3,7 +3,16 @@ import rospy
 import re
 import base64
 
-unicode = str
+import sys
+
+if sys.version_info[0] >= 3:
+    unicode = str
+    STRING_TYPES = [str]
+    BINARY_TYPES = [bytes, bytearray]
+else:
+    unicode = unicode
+    STRING_TYPES = [str, unicode]
+    BINARY_TYPES = [str] # In Py2, str is bytes
 
 ROS_DATATYPE_MAP = {
     'bool': ['bool'],
@@ -31,7 +40,6 @@ ROS_DATATYPE_MAP = {
 }
 
 PRIMITIVE_TYPES = [bool, int, float]
-STRING_TYPES = [str]
 LIST_TYPES = [list, tuple]
 
 ROS_TIME_TYPES = ['time', 'duration']
@@ -76,15 +84,11 @@ def _to_ros_type(_type, _value):
 
 
 def _to_ros_binary(_type, _value):
-    #  print("To ROS Binary: {}, {}".format(_type, type(_value)))
-    # Convert to utf8 string if data format is unicode. ROS does not accept unicodes.
-    if isinstance(_value, unicode):
-        _value = _value.encode('utf8')
     binary_value_as_string = _value
-    if type(_value) in STRING_TYPES:
-        binary_value_as_string = base64.standard_b64decode(_value.encode())
-    else:
-        binary_value_as_string = str(bytearray(_value))
+    if isinstance(_value, str):
+        binary_value_as_string = base64.standard_b64decode(_value.encode('utf-8'))
+    elif isinstance(_value, (bytes, bytearray, list, tuple)):
+        binary_value_as_string = bytes(_value)
     return binary_value_as_string
 
 
@@ -106,8 +110,9 @@ def _to_ros_time(_type, _value):
 
 
 def _to_ros_primitive(_type, _value):
-    if _type == "string" and isinstance(_value, unicode):
-        _value = _value.encode('utf8')
+    if _type == "string":
+        if sys.version_info[0] < 3 and isinstance(_value, unicode):
+            _value = _value.encode('utf8')
     elif _type in ["float32", "float64"]:
         if _value is None:
             _value = float('Inf')
@@ -151,7 +156,9 @@ def _from_ros_binary(_value):
     Args:
         _type (str): Data to serialize.
     """
-    _value = base64.standard_b64encode(_value.encode())
+    if isinstance(_value, str):
+        _value = _value.encode('utf-8')
+    _value = base64.standard_b64encode(_value).decode('utf-8')
     return _value
 
 
