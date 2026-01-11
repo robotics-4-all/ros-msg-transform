@@ -12,61 +12,54 @@ if sys.version_info[0] >= 3:
 else:
     unicode = unicode
     STRING_TYPES = [str, unicode]
-    BINARY_TYPES = [str] # In Py2, str is bytes
+    BINARY_TYPES = [str]  # In Py2, str is bytes
 
 ROS_DATATYPE_MAP = {
-    'bool': ['bool'],
-    'int': [
-        'int8',
-        'byte',
-        'uint8',
-        'char',
-        'int16',
-        'uint16',
-        'int32',
-        'uint32',
-        'int64',
-        'uint64',
-        'float32',
-        'float64'
+    "bool": ["bool"],
+    "int": [
+        "int8",
+        "byte",
+        "uint8",
+        "char",
+        "int16",
+        "uint16",
+        "int32",
+        "uint32",
+        "int64",
+        "uint64",
+        "float32",
+        "float64",
     ],
-    'float': [
-        'float32',
-        'float64'
-    ],
-    'str': ['string'],
-    'unicode': ['string'],
-    'long': ['uint64']
+    "float": ["float32", "float64"],
+    "str": ["string"],
+    "unicode": ["string"],
+    "long": ["uint64"],
 }
 
 PRIMITIVE_TYPES = [bool, int, float]
 LIST_TYPES = [list, tuple]
 
-ROS_TIME_TYPES = ['time', 'duration']
+ROS_TIME_TYPES = ["time", "duration"]
 ROS_PRIMITIVE_TYPES = [
-    'bool',
-    'byte',
-    'char',
-    'int8',
-    'uint8',
-    'int16',
-    'uint16',
-    'int32',
-    'uint32',
-    'int64',
-    'uint64',
-    'float32',
-    'float64',
-    'string'
+    "bool",
+    "byte",
+    "char",
+    "int8",
+    "uint8",
+    "int16",
+    "uint16",
+    "int32",
+    "uint32",
+    "int64",
+    "uint64",
+    "float32",
+    "float64",
+    "string",
 ]
-ROS_HEADER_TYPES = [
-    'Header',
-    'std_msgs/Header',
-    'roslib/Header'
-]
-ROS_BINARY_TYPES_REGEX = re.compile(r'(uint8|char)\[[^\]]*\]')
-ROS_BINARY_TYPES_REGEX_2 = r'(uint8|char)\[[^\]]*\]'
-LIST_BRACKETS = re.compile(r'\[[^\]]*\]')
+ROS_HEADER_TYPES = ["Header", "std_msgs/Header", "roslib/Header"]
+ROS_BINARY_TYPES_REGEX = re.compile(r"(uint8|char)\[[^\]]*\]")
+ROS_BINARY_TYPES_REGEX_2 = r"(uint8|char)\[[^\]]*\]"
+LIST_BRACKETS = re.compile(r"\[[^\]]*\]")
 
 
 def _to_ros_type(_type, _value):
@@ -86,7 +79,7 @@ def _to_ros_type(_type, _value):
 def _to_ros_binary(_type, _value):
     binary_value_as_string = _value
     if isinstance(_value, str):
-        binary_value_as_string = base64.standard_b64decode(_value.encode('utf-8'))
+        binary_value_as_string = base64.standard_b64decode(_value.encode("utf-8"))
     elif isinstance(_value, (bytes, bytearray, list, tuple)):
         binary_value_as_string = bytes(_value)
     return binary_value_as_string
@@ -95,32 +88,32 @@ def _to_ros_binary(_type, _value):
 def _to_ros_time(_type, _value):
     time = None
 
-    if _type == 'time' and _value == 'now':
+    if _type == "time" and _value == "now":
         time = rospy.get_rostime()
     else:
-        if _type == 'time':
+        if _type == "time":
             time = rospy.rostime.Time()
-        elif _type == 'duration':
+        elif _type == "duration":
             time = rospy.rostime.Duration()
-        if 'secs' in _value:
-            setattr(time, 'secs', _value['secs'])
-        if 'nsecs' in _value:
-            setattr(time, 'nsecs', _value['nsecs'])
+        if "secs" in _value:
+            setattr(time, "secs", _value["secs"])
+        if "nsecs" in _value:
+            setattr(time, "nsecs", _value["nsecs"])
     return time
 
 
 def _to_ros_primitive(_type, _value):
     if _type == "string":
         if sys.version_info[0] < 3 and isinstance(_value, unicode):
-            _value = _value.encode('utf8')
+            _value = _value.encode("utf8")
     elif _type in ["float32", "float64"]:
         if _value is None:
-            _value = float('Inf')
+            _value = float("Inf")
     return _value
 
 
 def _convert_to_ros_array(_type, list_value):
-    list_type = LIST_BRACKETS.sub('', _type)
+    list_type = LIST_BRACKETS.sub("", _type)
     return [_to_ros_type(list_type, value) for value in list_value]
 
 
@@ -157,16 +150,13 @@ def _from_ros_binary(_value):
         _type (str): Data to serialize.
     """
     if isinstance(_value, str):
-        _value = _value.encode('utf-8')
-    _value = base64.standard_b64encode(_value).decode('utf-8')
+        _value = _value.encode("utf-8")
+    _value = base64.standard_b64encode(_value).decode("utf-8")
     return _value
 
 
 def _from_ros_time(_value):
-    _value = {
-        'secs': _value.secs,
-        'nsecs': _value.nsecs
-    }
+    _value = {"secs": _value.secs, "nsecs": _value.nsecs}
     return _value
 
 
@@ -175,12 +165,12 @@ def _from_ros_primitive(_type, _value):
 
 
 def _from_ros_array(_type, _value):
-    list_type = LIST_BRACKETS.sub('', _type)
+    list_type = LIST_BRACKETS.sub("", _type)
     return [_from_ros_type(list_type, value) for value in _value]
 
 
 def _get_message_fields(message):
-    """ From here: http://wiki.ros.org/msg -> 4. Client Library Support
+    """From here: http://wiki.ros.org/msg -> 4. Client Library Support
 
     In Python, the generated Python message file (e.g. std_msgs.msg.String) provides
     nearly all the information you might want about a .msg file. You can examine the
@@ -214,11 +204,12 @@ def _dict_to_ros(message, dictionary):
             _value = _to_ros_type(_type, _value)
             setattr(message, field_name, _value)
         else:
-            err = f'ROS message has no field named: {field_name}'
+            err = f"ROS message has no field named: {field_name}"
             #  err = 'ROS message type "{0}" has no field named "{1}"'\
-                #  .format(message_type, field_name)
+            #  .format(message_type, field_name)
             raise ValueError(err)
     return message
+
 
 def _ros_to_dict(message):
     """Take in a ROS message and returns a Python dictionary.
@@ -233,6 +224,7 @@ def _ros_to_dict(message):
         _value = getattr(message, field_name)
         dictionary[field_name] = _from_ros_type(_type, _value)
     return dictionary
+
 
 def _srv_type_to_instance(service_type, request=False, response=False):
     srv_cls = get_service_class(service_type, reload_on_error=False)
@@ -249,6 +241,7 @@ def _srv_type_to_instance(service_type, request=False, response=False):
     # print(type(_instance))
     return _instance
 
+
 def dict_to_ros_msg(message_type, dictionary):
     """Transform a dict object into a ROS Message, given it's type.
 
@@ -262,6 +255,7 @@ def dict_to_ros_msg(message_type, dictionary):
     message_class = get_message_class(message_type)
     message = message_class()
     return _dict_to_ros(message, dictionary)
+
 
 def ros_msg_to_dict(message):
     """Transform a ROS Message into a dict.
@@ -294,7 +288,9 @@ def get_service_class(service_type, reload_on_error=False):
     @param service_type: The ROS Service type.
     @type service_type: TODO
     """
-    return roslib.message.get_service_class(service_type, reload_on_error=reload_on_error)
+    return roslib.message.get_service_class(
+        service_type, reload_on_error=reload_on_error
+    )
 
 
 def dict_to_ros_srv_response(service_type, dictionary):
