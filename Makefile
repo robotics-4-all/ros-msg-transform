@@ -1,4 +1,4 @@
-.PHONY: test build install clean bump-major bump-minor bump-patch
+.PHONY: test build install clean bump-major bump-minor bump-patch publish
 
 PYTHON = python3
 PIP = pip3
@@ -24,3 +24,6 @@ bump-minor:
 
 bump-patch:
 	bumpversion patch
+
+publish: build
+	uv publish
