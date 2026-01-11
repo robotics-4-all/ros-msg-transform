@@ -8,20 +8,30 @@ permissions:
   contents: read
 
 jobs:
-  # SAFETY CHECK: Run tests one last time before publishing
   test-before-ship:
     name: Validate Release Candidate
     runs-on: ubuntu-latest
     container:
       image: ros:noetic-ros-base
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv venv --system-site-packages
-      - run: |
+
+      - name: Create venv
+        run: uv venv --system-site-packages
+
+      - name: Install dependencies
+        run: |
           source .venv/bin/activate
           uv pip install .[test]
-      - env:
+
+      - name: Run Tests
+        env:
           PYTHONPATH: /opt/ros/noetic/lib/python3/dist-packages
         run: |
           source .venv/bin/activate
