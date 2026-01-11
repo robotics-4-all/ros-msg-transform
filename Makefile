@@ -6,7 +6,7 @@ PIP = pip3
 test:
 	${PYTHON} -m pytest -v
 
-build: test
+build:
 	$(PYTHON) -m build
 
 install: build
