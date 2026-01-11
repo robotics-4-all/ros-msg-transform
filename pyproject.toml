@@ -32,7 +32,8 @@ dev = [
 ]
 test = [
     "pytest",
-    "pytest-cov"
+    "pytest-cov",
+    "coverage",
 ]
 
 [project.urls]

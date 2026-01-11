@@ -7,14 +7,14 @@ test:
 	${PYTHON} -m pytest -v --cov=ros_msg_transform --cov-report=xml --cov-report=term-missing
 
 coverage:
-	${PYTHON} -m pytest -v --cov=ros_msg_transform --cov-report=html
+	${PYTHON} -m pytest -v --cov=ros_msg_transform --cov-report=html && coverage report -m
 
 coverage-docker:
 	docker run --rm \
 		-v $$(pwd):/workspace \
 		-w /workspace \
 		ros:noetic-ros-base \
-		/bin/bash -c "apt-get update -qq && apt-get install -y -qq python3-pip && pip3 install .[test] && python3 -m pytest -v --cov=ros_msg_transform --cov-report=html"
+		/bin/bash -c "apt-get update -qq && apt-get install -y -qq python3-pip && pip3 install .[test] && python3 -m pytest -v --cov=ros_msg_transform --cov-report=html && coverage report -m"
 
 test-docker:
 	docker run --rm \
