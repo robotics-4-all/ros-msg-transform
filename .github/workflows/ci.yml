@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    name: Test on ROS Noetic
+    runs-on: ubuntu-latest
+    container:
+      image: ros:noetic-ros-base
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Create venv (System Packages)
+        run: uv venv --system-site-packages
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          uv pip install .[test]
+
+      - name: Run Tests
+        env:
+          PYTHONPATH: /opt/ros/noetic/lib/python3/dist-packages
+        run: |
+          source .venv/bin/activate
+          pytest -v
