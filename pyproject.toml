@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ros-msg-transform"
-version = "0.2.3"
+version = "0.3.0"
 description = "Library to transform ROS messages to Python structures"
 authors = [
     { name = "Konstantinos Panayiotou", email = "klpanagi@ece.auth.gr" }
