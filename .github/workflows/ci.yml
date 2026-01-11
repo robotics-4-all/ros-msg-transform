@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   test:
@@ -12,9 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ros:noetic-ros-base
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
