@@ -32,6 +32,10 @@ dev = [
     "bump2version>=0.5.11",
     "pytest>=7.0.0",
 ]
+test = [
+    "pytest",
+    "pytest-cov"
+]
 
 [project.urls]
 homepage = "https://github.com/robotics4all/ros-msg-transform"
