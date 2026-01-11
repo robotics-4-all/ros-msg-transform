@@ -6,6 +6,13 @@ PIP = pip3
 test:
 	${PYTHON} -m pytest -v
 
+test-docker:
+	docker run --rm \
+		-v $$(pwd):/workspace \
+		-w /workspace \
+		ros:noetic-ros-base \
+		/bin/bash -c "apt-get update -qq && apt-get install -y -qq python3-pip && pip3 install .[test] && python3 -m pytest -v"
+
 build:
 	$(PYTHON) -m build
 
