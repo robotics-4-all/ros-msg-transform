@@ -4,12 +4,12 @@ PYTHON = python3
 PIP = pip3
 
 test:
-	$(PYTHON) tests/test_transform.py
+	${PYTHON} -m pytest -v
 
-build:
+build: test
 	$(PYTHON) -m build
 
-install:
+install: build
 	$(PIP) install .
 
 clean:

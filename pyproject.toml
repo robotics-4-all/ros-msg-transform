@@ -30,6 +30,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "bump2version>=0.5.11",
+    "pytest>=7.0.0",
 ]
 
 [project.urls]
